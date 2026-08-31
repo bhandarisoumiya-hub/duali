@@ -82,7 +82,7 @@
             ctx.shadowBlur = 8;
             ctx.fillText('SCRATCH TO REVEAL', w / 2, h / 2 - 12);
             
-            ctx.font = 'italic 18px "Cormorant Garamond", serif';
+            ctx.font = 'italic 18px "Playfair Display", serif';
             ctx.letterSpacing = '1px';
             ctx.fillText('the date & time', w / 2, h / 2 + 20);
             ctx.shadowColor = 'transparent';
@@ -234,5 +234,6 @@
             }, Math.random() * 2000);
         }
     }
+
 
 

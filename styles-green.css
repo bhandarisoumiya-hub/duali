@@ -115,14 +115,19 @@ body {
 .hint {
     font-size: 12px;
     letter-spacing: 5px;
-    color: var(--primary);
+    color: var(--ink);
+    font-weight: 600;
     text-transform: uppercase;
     margin: 0;
+    text-align: center;
+    width: 100%;
     animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.4; }
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
     50% { opacity: 1; }
 }
 
@@ -203,7 +208,7 @@ body {
 }
 
 .invite-card h1 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 48px;
     font-weight: 400;
     margin: 0 0 20px;
@@ -285,7 +290,7 @@ body {
 }
 
 .date-block .num { 
-    font-family: 'Cormorant Garamond', serif; 
+    font-family: 'Playfair Display', serif; 
     font-size: 54px; 
     color: var(--ink); 
     line-height: 1; 
@@ -299,7 +304,7 @@ body {
 }
 
 .amp {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 28px;
     color: var(--primary);
@@ -319,7 +324,7 @@ body {
     color: var(--ink-soft);
     margin: 2px 0 20px;
     font-style: italic;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
 }
 
 .venue { 
@@ -344,7 +349,7 @@ body {
 }
 
 .closing {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 22px;
     color: var(--ink);
@@ -411,7 +416,7 @@ body {
 }
 
 .cd-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 42px;
     color: var(--ink);
     line-height: 1;
@@ -427,9 +432,17 @@ body {
 }
 
 @media (max-width: 500px) {
-    .invite-card {
-        padding: 50px 20px;
-    }
+    .invite-card { padding: 40px 15px; }
+    .invite-card h1 { font-size: 34px; }
+    .dates { flex-direction: row; align-items: baseline; gap: 15px; }
+    .date-block .num { font-size: 40px; }
+    .date-block .month { font-size: 11px; }
+    .amp { display: block !important; font-size: 22px; transform: translateY(-5px); }
+    .countdown { gap: 15px; }
+    .cd-num { font-size: 28px; }
+    .envelope-wrapper { transform: scale(0.85); }
+    .scratch-content { padding: 30px 10px; }
+}
     .invite-card h1 {
         font-size: 38px;
     }
@@ -466,8 +479,7 @@ body {
 
 .glow-rings {
     position: absolute;
-    width: 250px;
-    height: 250px;
+    width: 440px; height: 440px;
     border-radius: 50%;
     border: 1px solid var(--primary);
     top: 50%;
@@ -478,8 +490,8 @@ body {
     z-index: -1;
 }
 @keyframes ripple {
-    0% { width: 250px; height: 250px; opacity: 0.6; border-width: 2px; }
-    100% { width: 700px; height: 700px; opacity: 0; border-width: 1px; }
+    0% { width: 440px; height: 440px; opacity: 0.6; border-width: 2px; }
+    100% { width: 850px; height: 850px; opacity: 0; border-width: 1px; }
 }
 
 .envelope {
@@ -602,16 +614,21 @@ body {
 }
 
 .hint {
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 5px;
-    color: var(--primary-dark);
+    color: var(--ink);
+    font-weight: 600;
     text-transform: uppercase;
     margin: 0;
+    text-align: center;
+    width: 100%;
     animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
     50% { opacity: 1; }
 }
 
@@ -620,16 +637,7 @@ body {
 
 
 /* CELEBRATION FALLING ANIMATION */
-#celebration-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 10;
-}
+#celebration-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 9999; }
 .confetti {
     position: absolute;
     top: -50px;
@@ -779,3 +787,8 @@ body {
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     z-index: 2;
 }
+
+
+
+
+
