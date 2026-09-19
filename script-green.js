@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // 1. Seal Animation & Transition
     const flapTop = document.getElementById('flap-top');
     const envelope = document.getElementById('envelope');
@@ -7,27 +7,29 @@
     const hint = document.getElementById('hint');
     const ambientContainer = document.querySelector('.ambient-dust');
 
-    flapTop.addEventListener('click', () => {
+    envelopeView.addEventListener('click', () => {
         if (envelope.classList.contains('open')) return;
         envelope.classList.add('open');
-        if (hint) hint.style.opacity = '0';
-        
-        // After flap opens, transition out the envelope and show the card
+        if (hint) hint.style.display = 'none';
+
+        // Wait for the gorgeous, slow card pull-out animation to finish (approx 3800ms)
         setTimeout(() => {
-            envelopeView.style.transform = 'translateY(100px)';
+            envelopeView.style.transform = 'translateY(80px) scale(0.95)';
             envelopeView.style.opacity = '0';
             if (ambientContainer) ambientContainer.style.opacity = '0';
-            
+
             setTimeout(() => {
                 envelopeView.style.display = 'none';
                 inviteView.style.display = 'flex';
-                requestAnimationFrame(() => {
-                    inviteView.classList.add('show');
-                    initScratch();
-                    startCelebration();
-                });
-            }, 1200);
-        }, 800); // Time for the flap to open
+
+                // Force a browser reflow to ensure the CSS transition triggers reliably on mobile
+                void inviteView.offsetWidth;
+
+                inviteView.classList.add('show');
+                initScratch();
+                startCelebration();
+            }, 500); // Matches the new 0.5s envelope fade transition
+        }, 1500);
     });
 
     // 2. Scratch Canvas Logic
@@ -50,29 +52,29 @@
 
         function drawScratchLayer() {
             const w = canvas.width, h = canvas.height;
-            
+
             // Ultra-premium Emerald Green Foil Gradient
             const grad = ctx.createLinearGradient(0, 0, w, h);
             grad.addColorStop(0, '#a8bb5f');
             grad.addColorStop(0.3, '#8a9848');
             grad.addColorStop(0.7, '#6b7a33');
             grad.addColorStop(1, '#586626');
-            
+
             ctx.globalCompositeOperation = 'source-over';
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, w, h);
 
             // High density Shimmer/Noise for realistic foil
-            for(let i=0; i<2500; i++){
-                ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.08})`;
-                ctx.fillRect(Math.random()*w, Math.random()*h, 1, 1);
+            for (let i = 0; i < 2500; i++) {
+                ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.08})`;
+                ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1);
             }
             // Add some dark speckles for depth
-            for(let i=0; i<500; i++){
-                ctx.fillStyle = `rgba(0,0,0,${Math.random()*0.1})`;
-                ctx.fillRect(Math.random()*w, Math.random()*h, 1.5, 1.5);
+            for (let i = 0; i < 500; i++) {
+                ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.1})`;
+                ctx.fillRect(Math.random() * w, Math.random() * h, 1.5, 1.5);
             }
-            
+
             // Text on scratch foil
             ctx.fillStyle = '#ffffff';
             ctx.font = '500 13px Montserrat, sans-serif';
@@ -81,7 +83,7 @@
             ctx.shadowColor = 'rgba(0,0,0,0.4)';
             ctx.shadowBlur = 8;
             ctx.fillText('SCRATCH TO REVEAL', w / 2, h / 2 - 12);
-            
+
             ctx.font = 'italic 18px "Playfair Display", serif';
             ctx.letterSpacing = '1px';
             ctx.fillText('the date & time', w / 2, h / 2 + 20);
@@ -90,7 +92,7 @@
 
         sizeCanvas();
         window.addEventListener('resize', sizeCanvas);
-        
+
         let isDown = false;
         let cleared = false;
 
@@ -135,14 +137,14 @@
             scratchAt(p.x, p.y);
             if (e.cancelable) e.preventDefault();
         }
-        
+
         function move(e) {
             if (!isDown || cleared) return;
             const p = pos(e);
             scratchAt(p.x, p.y);
             if (e.cancelable) e.preventDefault();
         }
-        
+
         function end() {
             if (isDown) checkClearedAmount();
             isDown = false;
@@ -159,8 +161,8 @@
 
     // 3. Countdown Logic
     function initCountdown() {
-        const targetDate = new Date('September 18, 2026 11:00:00').getTime();
-        
+        const targetDate = new Date('September 19, 2026 11:00:00').getTime();
+
         const daysEl = document.getElementById('cd-days');
         const hoursEl = document.getElementById('cd-hours');
         const minsEl = document.getElementById('cd-mins');
@@ -195,45 +197,102 @@
 
     // Initialize countdown right away
     initCountdown();
+
+    // 4. RSVP Modal Logic
+    const rsvpBtn = document.getElementById('rsvp-now-btn');
+    const rsvpModal = document.getElementById('rsvp-modal');
+    const closeModal = document.getElementById('close-modal');
+    const rsvpForm = document.getElementById('rsvp-form');
+    const quickRsvp = document.getElementById('quick-rsvp');
+
+    // Background Music
+    const bgMusic = new Audio("https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3");
+    bgMusic.loop = true;
+
+    if (rsvpBtn && rsvpModal) {
+        rsvpBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            rsvpModal.classList.remove('hidden');
+            // Play music on interaction
+            bgMusic.play().catch(err => console.log("Audio play blocked:", err));
+        });
+
+        closeModal.addEventListener('click', () => {
+            rsvpModal.classList.add('hidden');
+            bgMusic.pause(); // Stop music when closing modal (optional, but good UX)
+        });
+
+        // Close when clicking outside
+        rsvpModal.addEventListener('click', (e) => {
+            if (e.target === rsvpModal) {
+                rsvpModal.classList.add('hidden');
+                bgMusic.pause();
+            }
+        });
+
+        rsvpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('rsvp-name').value;
+            const date = document.querySelector('input[name="date"]:checked').value;
+            const guests = document.querySelector('input[name="guests"]:checked').value;
+
+            const message = `Hello! I would like to RSVP for Duali.\n\nName: ${name}\nAttending: ${date}\nGuests: ${guests}`;
+            const whatsappUrl = `https://wa.me/+919825550430?text=${encodeURIComponent(message)}`;
+
+            window.open(whatsappUrl, '_blank');
+            rsvpModal.classList.add('hidden');
+            bgMusic.pause();
+        });
+
+        quickRsvp.addEventListener('click', (e) => {
+            e.preventDefault();
+            const message = `Hello! I would like to RSVP for Duali.`;
+            const whatsappUrl = `https://wa.me/+919825550430?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            rsvpModal.classList.add('hidden');
+            bgMusic.pause();
+        });
+    }
 });
 
 
 
-    // Celebration Confetti
-    function startCelebration() {
-        const container = document.getElementById('celebration-container');
-        if (!container) return;
-        
-        const colors = ['#8a9848', '#a8bb5f', '#6b7a33', '#ebd188']; // green and subtle gold
-        
-        for (let i = 0; i < 40; i++) {
+// Celebration Confetti
+function startCelebration() {
+    const container = document.getElementById('celebration-container');
+    if (!container) return;
+
+    const colors = ['#8a9848', '#a8bb5f', '#6b7a33', '#ebd188']; // green and subtle gold
+
+    for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+            const conf = document.createElement('div');
+            conf.classList.add('confetti');
+            conf.style.left = Math.random() * 100 + 'vw';
+            conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            // Randomize leaf shape slightly
+            if (Math.random() > 0.5) {
+                conf.style.borderRadius = '0 50% 0 50%';
+            }
+
+            const duration = Math.random() * 3 + 3; // 3 to 6 seconds
+            conf.style.animationDuration = duration + 's';
+
+            // Random horizontal drift using a custom keyframe wouldn't be dynamic easily, 
+            // so we just rely on rotation to make it look nice. 
+            // Add scale variation
+            conf.style.transform = 'scale(' + (Math.random() * 0.8 + 0.5) + ')';
+
+            container.appendChild(conf);
+
             setTimeout(() => {
-                const conf = document.createElement('div');
-                conf.classList.add('confetti');
-                conf.style.left = Math.random() * 100 + 'vw';
-                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Randomize leaf shape slightly
-                if (Math.random() > 0.5) {
-                    conf.style.borderRadius = '0 50% 0 50%';
-                }
-                
-                const duration = Math.random() * 3 + 3; // 3 to 6 seconds
-                conf.style.animationDuration = duration + 's';
-                
-                // Random horizontal drift using a custom keyframe wouldn't be dynamic easily, 
-                // so we just rely on rotation to make it look nice. 
-                // Add scale variation
-                conf.style.transform = 'scale(' + (Math.random() * 0.8 + 0.5) + ')';
-                
-                container.appendChild(conf);
-                
-                setTimeout(() => {
-                    conf.remove();
-                }, duration * 1000);
-            }, Math.random() * 2000);
-        }
+                conf.remove();
+            }, duration * 1000);
+        }, Math.random() * 2000);
     }
+}
 
 
 

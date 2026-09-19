@@ -6,6 +6,19 @@ html_template = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Duali Tableware Showcase — {title}</title>
+    
+    <!-- Social Meta Tags for Large Image Preview -->
+    <meta property="og:title" content="You're Invited to the Duali Tableware Showcase">
+    <meta property="og:description" content="Looking forward to seeing you!!">
+    <meta property="og:image" content="https://invitation.duali.co/image.png">
+    <meta property="og:url" content="https://invitation.duali.co/">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="You're Invited to the Duali Tableware Showcase">
+    <meta name="twitter:description" content="Looking forward to seeing you!!">
+    <meta name="twitter:image" content="https://invitation.duali.co/image.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
@@ -218,8 +231,8 @@ body {
 }
 
 .eyebrow {
-    font-size: 11px;
-    letter-spacing: 2px;
+    font-size: clamp(18px, 3vh, 22px);
+    letter-spacing: 3px;
     color: var(--primary-dark);
     text-transform: uppercase;
     margin: 0 0 16px;
@@ -233,6 +246,7 @@ body {
     margin: 0 0 20px;
     color: var(--ink);
     letter-spacing: 1px;
+    line-height: 1.1;
 }
 
 .lede {
@@ -384,6 +398,13 @@ body {
 @media (max-width: 500px) {
     .invite-card {
         padding: 40px 20px;
+    }
+    .eyebrow {
+        font-size: clamp(16px, 4.5vw, 20px);
+        letter-spacing: 2px;
+        line-height: 1.6;
+        white-space: normal;
+        max-width: 100%;
     }
     .invite-card h1 {
         font-size: 34px;
